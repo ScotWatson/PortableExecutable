@@ -112,43 +112,152 @@ IMAGE_FILE_DLL  0x2000  "The image file is a dynamic-link library (DLL). Such fi
 IMAGE_FILE_UP_SYSTEM_ONLY 0x4000  "The file should be run only on a uniprocessor machine."
 IMAGE_FILE_BYTES_REVERSED_HI  0x8000  "Big endian: the MSB precedes the LSB in memory. This flag is deprecated and should be zero."
 
-Offset 	Size 	Field 	Description
-start: 0
-length: 2
-	Magic
-	The unsigned integer that identifies the state of the image file. The most common number is 0x10B, which identifies it as a normal executable file. 0x107 identifies it as a ROM image, and 0x20B identifies it as a PE32+ executable.
-start: 2
-length: 1
-	MajorLinkerVersion
-	The linker major version number.
-start: 3
-length: 1
-	MinorLinkerVersion
-	The linker minor version number.
-start: 4
-length: 4
-	SizeOfCode
-	The size of the code (text) section, or the sum of all code sections if there are multiple sections.
-start: 8
-length: 4
-	SizeOfInitializedData
-	The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
-start: 12
-length: 4
-	SizeOfUninitializedData
-	The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
-start: 16
-length: 4
-	AddressOfEntryPoint
-	The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
-start: 20
-length: 4
-	BaseOfCode
-	The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
+class PE32OptionalHeader {
+  #view;
+  constructor(args) {
+    this.#view = args;
+  }
+  // The unsigned integer that identifies the state of the image file. The most common number is 0x10B, which identifies it as a normal executable file. 0x107 identifies it as a ROM image, and 0x20B identifies it as a PE32+ executable.
+  get viewMagic() {
+    return this.#view.createSlice({
+      start: 0,
+      end: 2,
+      byteLength: 2,
+    });
+  }
+  // The linker major version number.
+  get viewMajorLinkerVersion() {
+    return this.#view.createSlice({
+      start: 2,
+      end: 3,
+      byteLength: 1,
+    });
+  }
+  // The linker minor version number.
+  get viewMinorLinkerVersion() {
+    return this.#view.createSlice({
+      start: 3,
+      end: 4,
+      byteLength: 1,
+    });
+  }
+  // The size of the code (text) section, or the sum of all code sections if there are multiple sections.
+  get viewSizeOfCode() {
+    return this.#view.createSlice({
+      start: 4,
+      end: 8,
+      byteLength: 4,
+    });
+  }
+  // The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
+  get viewSizeOfInitializedData() {
+    return this.#view.createSlice({
+      start: 8,
+      end: 12,
+      byteLength: 4,
+    });
+  }
+  // The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
+  get viewSizeOfUninitializedData() {
+    return this.#view.createSlice({
+      start: 12,
+      end: 16,
+      byteLength: 4,
+    });
+  }
+  // The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
+  get viewAddressOfEntryPoint() {
+    return this.#view.createSlice({
+      start: 16,
+      end: 20,
+      byteLength: 4,
+    });
+  }
+  // The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
+  get viewBaseOfCode() {
+    return this.#view.createSlice({
+      start: 20,
+      end: 24,
+      byteLength: 4,
+    });
+  }
+};
 
-PE32 contains this additional field, which is absent in PE32+, following BaseOfCode.
-Offset 	Size 	Field 	Description
-start: 24
-length: 4
-	BaseOfData
-	The address that is relative to the image base of the beginning-of-data section when it is loaded into memory.
+class PE32PlusOptionalHeader {
+  #view;
+  constructor(args) {
+    this.#view = args;
+  }
+  // The unsigned integer that identifies the state of the image file. The most common number is 0x10B, which identifies it as a normal executable file. 0x107 identifies it as a ROM image, and 0x20B identifies it as a PE32+ executable.
+  get viewMagic() {
+    return this.#view.createSlice({
+      start: 0,
+      end: 2,
+      byteLength: 2,
+    });
+  }
+  // The linker major version number.
+  get viewMajorLinkerVersion() {
+    return this.#view.createSlice({
+      start: 2,
+      end: 3,
+      byteLength: 1,
+    });
+  }
+  // The linker minor version number.
+  get viewMinorLinkerVersion() {
+    return this.#view.createSlice({
+      start: 3,
+      end: 4,
+      byteLength: 1,
+    });
+  }
+  // The size of the code (text) section, or the sum of all code sections if there are multiple sections.
+  get viewSizeOfCode() {
+    return this.#view.createSlice({
+      start: 4,
+      end: 8,
+      byteLength: 4,
+    });
+  }
+  // The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
+  get viewSizeOfInitializedData() {
+    return this.#view.createSlice({
+      start: 8,
+      end: 12,
+      byteLength: 4,
+    });
+  }
+  // The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
+  get viewSizeOfUninitializedData() {
+    return this.#view.createSlice({
+      start: 12,
+      end: 16,
+      byteLength: 4,
+    });
+  }
+  // The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
+  get viewAddressOfEntryPoint() {
+    return this.#view.createSlice({
+      start: 16,
+      end: 20,
+      byteLength: 4,
+    });
+  }
+  // The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
+  get viewBaseOfCode() {
+    return this.#view.createSlice({
+      start: 20,
+      end: 24,
+      byteLength: 4,
+    });
+  }
+  // The address that is relative to the image base of the beginning-of-data section when it is loaded into memory.
+  get viewBaseOfData() {
+    return this.#view.createSlice({
+      start: 20,
+      end: 24,
+      byteLength: 4,
+    });
+  }
+};
