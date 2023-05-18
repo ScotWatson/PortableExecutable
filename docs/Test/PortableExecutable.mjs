@@ -64,53 +64,93 @@ class COFFFileHeader {
 };
 
 
-IMAGE_FILE_MACHINE_UNKNOWN  0x0 "The content of this field is assumed to be applicable to any machine type"
-IMAGE_FILE_MACHINE_ALPHA  0x184 "Alpha AXP, 32-bit address space"
-IMAGE_FILE_MACHINE_ALPHA64  0x284 "Alpha 64, 64-bit address space"
-IMAGE_FILE_MACHINE_AM33 0x1d3 "Matsushita AM33"
-IMAGE_FILE_MACHINE_AMD64  0x8664  "x64"
-IMAGE_FILE_MACHINE_ARM  0x1c0 "ARM little endian"
-IMAGE_FILE_MACHINE_ARM64  0xaa64  "ARM64 little endian"
-IMAGE_FILE_MACHINE_ARMNT  0x1c4 "ARM Thumb-2 little endian"
-IMAGE_FILE_MACHINE_AXP64  0x284 "AXP 64 (Same as Alpha 64)"
-IMAGE_FILE_MACHINE_EBC  0xebc "EFI byte code"
-IMAGE_FILE_MACHINE_I386 0x14c "Intel 386 or later processors and compatible processors"
-IMAGE_FILE_MACHINE_IA64 0x200 "Intel Itanium processor family"
-IMAGE_FILE_MACHINE_LOONGARCH32  0x6232  "LoongArch 32-bit processor family"
-IMAGE_FILE_MACHINE_LOONGARCH64  0x6264  "LoongArch 64-bit processor family"
-IMAGE_FILE_MACHINE_M32R 0x9041  "Mitsubishi M32R little endian"
-IMAGE_FILE_MACHINE_MIPS16 0x266 "MIPS16"
-IMAGE_FILE_MACHINE_MIPSFPU  0x366 "MIPS with FPU"
-IMAGE_FILE_MACHINE_MIPSFPU16  0x466 "MIPS16 with FPU"
-IMAGE_FILE_MACHINE_POWERPC  0x1f0 "Power PC little endian"
-IMAGE_FILE_MACHINE_POWERPCFP  0x1f1 "Power PC with floating point support"
-IMAGE_FILE_MACHINE_R4000  0x166 "MIPS little endian"
-IMAGE_FILE_MACHINE_RISCV32  0x5032  "RISC-V 32-bit address space"
-IMAGE_FILE_MACHINE_RISCV64  0x5064  "RISC-V 64-bit address space"
-IMAGE_FILE_MACHINE_RISCV128 0x5128  "RISC-V 128-bit address space"
-IMAGE_FILE_MACHINE_SH3  0x1a2 "Hitachi SH3"
-IMAGE_FILE_MACHINE_SH3DSP 0x1a3 "Hitachi SH3 DSP"
-IMAGE_FILE_MACHINE_SH4  0x1a6 "Hitachi SH4"
-IMAGE_FILE_MACHINE_SH5  0x1a8 "Hitachi SH5"
-IMAGE_FILE_MACHINE_THUMB  0x1c2 "Thumb"
-IMAGE_FILE_MACHINE_WCEMIPSV2  0x169 "MIPS little-endian WCE v2"
+const IMAGE_FILE_MACHINE = (function () {
+  let ret = new Map();
+  ret.add("UNKNOWN",     0x0000); // The content of this field is assumed to be applicable to any machine type
+  ret.add("ALPHA",       0x0184); // Alpha AXP, 32-bit address space
+  ret.add("ALPHA64",     0x0284); // Alpha 64, 64-bit address space
+  ret.add("AM33",        0x01D3); // Matsushita AM33
+  ret.add("AMD64",       0x8664); // x64
+  ret.add("ARM",         0x01C0); // ARM little endian
+  ret.add("ARM64",       0xAA64); // ARM64 little endian
+  ret.add("ARMNT",       0x01C4); // ARM Thumb-2 little endian
+  ret.add("AXP64",       0x0284); // AXP 64 (Same as Alpha 64)
+  ret.add("EBC",         0x0EBC); // EFI byte code
+  ret.add("I386",        0x014C); // Intel 386 or later processors and compatible processors
+  ret.add("IA64",        0x0200); // Intel Itanium processor family
+  ret.add("LOONGARCH32", 0x6232); // LoongArch 32-bit processor family
+  ret.add("LOONGARCH64", 0x6264); // LoongArch 64-bit processor family
+  ret.add("M32R",        0x9041); // Mitsubishi M32R little endian
+  ret.add("MIPS16",      0x0266); // MIPS16
+  ret.add("MIPSFPU",     0x0366); // MIPS with FPU
+  ret.add("MIPSFPU16",   0x0466); // MIPS16 with FPU
+  ret.add("POWERPC",     0x01F0); // Power PC little endian
+  ret.add("POWERPCFP",   0x01F1); // Power PC with floating point support
+  ret.add("R4000",       0x0166); // MIPS little endian
+  ret.add("RISCV32",     0x5032); // RISC-V 32-bit address space
+  ret.add("RISCV64",     0x5064); // RISC-V 64-bit address space
+  ret.add("RISCV128",    0x5128); // RISC-V 128-bit address space
+  ret.add("SH3",         0x01A2); // Hitachi SH3
+  ret.add("SH3DSP",      0x01A3); // Hitachi SH3 DSP
+  ret.add("SH4",         0x01A6); // Hitachi SH4
+  ret.add("SH5",         0x01A8); // Hitachi SH5
+  ret.add("THUMB",       0x01C2); // Thumb
+  ret.add("WCEMIPSV2",   0x0169); // MIPS little-endian WCE v2
+  return ret;
+})();
 
-IMAGE_FILE_RELOCS_STRIPPED  0x0001  "Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the loader reports an error. The default behavior of the linker is to strip base relocations from executable (EXE) files."
-IMAGE_FILE_EXECUTABLE_IMAGE 0x0002  "Image only. This indicates that the image file is valid and can be run. If this flag is not set, it indicates a linker error."
-IMAGE_FILE_LINE_NUMS_STRIPPED 0x0004  "COFF line numbers have been removed. This flag is deprecated and should be zero."
-IMAGE_FILE_LOCAL_SYMS_STRIPPED  0x0008  "COFF symbol table entries for local symbols have been removed. This flag is deprecated and should be zero."
-IMAGE_FILE_AGGRESSIVE_WS_TRIM 0x0010  "Obsolete. Aggressively trim working set. This flag is deprecated for Windows 2000 and later and must be zero."
-IMAGE_FILE_LARGE_ADDRESS_AWARE  0x0020  "Application can handle > 2-GB addresses."
+const IMAGE_FILE_MACHINE_INV = (function () {
+  let ret = new Map();
+  ret.add(0x0000, "UNKNOWN"    ); // The content of this field is assumed to be applicable to any machine type
+  ret.add(0x0184, "ALPHA"      ); // Alpha AXP, 32-bit address space
+  ret.add(0x0284, "ALPHA64"    ); // Alpha 64, 64-bit address space
+  ret.add(0x01D3, "AM33"       ); // Matsushita AM33
+  ret.add(0x8664, "AMD64"      ); // x64
+  ret.add(0x01C0, "ARM"        ); // ARM little endian
+  ret.add(0xAA64, "ARM64"      ); // ARM64 little endian
+  ret.add(0x01C4, "ARMNT"      ); // ARM Thumb-2 little endian
+  ret.add(0x0284, "AXP64"      ); // AXP 64 (Same as Alpha 64)
+  ret.add(0x0EBC, "EBC"        ); // EFI byte code
+  ret.add(0x014C, "I386"       ); // Intel 386 or later processors and compatible processors
+  ret.add(0x0200, "IA64"       ); // Intel Itanium processor family
+  ret.add(0x6232, "LOONGARCH32"); // LoongArch 32-bit processor family
+  ret.add(0x6264, "LOONGARCH64"); // LoongArch 64-bit processor family
+  ret.add(0x9041, "M32R"       ); // Mitsubishi M32R little endian
+  ret.add(0x0266, "MIPS16"     ); // MIPS16
+  ret.add(0x0366, "MIPSFPU"    ); // MIPS with FPU
+  ret.add(0x0466, "MIPSFPU16"  ); // MIPS16 with FPU
+  ret.add(0x01F0, "POWERPC"    ); // Power PC little endian
+  ret.add(0x01F1, "POWERPCFP"  ); // Power PC with floating point support
+  ret.add(0x0166, "R4000"      ); // MIPS little endian
+  ret.add(0x5032, "RISCV32"    ); // RISC-V 32-bit address space
+  ret.add(0x5064, "RISCV64"    ); // RISC-V 64-bit address space
+  ret.add(0x5128, "RISCV128"   ); // RISC-V 128-bit address space
+  ret.add(0x01A2, "SH3"        ); // Hitachi SH3
+  ret.add(0x01A3, "SH3DSP"     ); // Hitachi SH3 DSP
+  ret.add(0x01A6, "SH4"        ); // Hitachi SH4
+  ret.add(0x01A8, "SH5"        ); // Hitachi SH5
+  ret.add(0x01C2, "THUMB"      ); // Thumb
+  ret.add(0x0169, "WCEMIPSV2"  ); // MIPS little-endian WCE v2
+  return ret;
+})();
+
+IMAGE_FILE
+"RELOCS_STRIPPED"  0x0001  "Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the loader reports an error. The default behavior of the linker is to strip base relocations from executable (EXE) files."
+"EXECUTABLE_IMAGE" 0x0002  "Image only. This indicates that the image file is valid and can be run. If this flag is not set, it indicates a linker error."
+"LINE_NUMS_STRIPPED" 0x0004  "COFF line numbers have been removed. This flag is deprecated and should be zero."
+"LOCAL_SYMS_STRIPPED"  0x0008  "COFF symbol table entries for local symbols have been removed. This flag is deprecated and should be zero."
+"AGGRESSIVE_WS_TRIM" 0x0010  "Obsolete. Aggressively trim working set. This flag is deprecated for Windows 2000 and later and must be zero."
+"LARGE_ADDRESS_AWARE"  0x0020  "Application can handle > 2-GB addresses."
   0x0040  "This flag is reserved for future use."
-IMAGE_FILE_BYTES_REVERSED_LO  0x0080  "Little endian: the least significant bit (LSB) precedes the most significant bit (MSB) in memory. This flag is deprecated and should be zero."
-IMAGE_FILE_32BIT_MACHINE  0x0100  "Machine is based on a 32-bit-word architecture."
-IMAGE_FILE_DEBUG_STRIPPED 0x0200  "Debugging information is removed from the image file."
-IMAGE_FILE_REMOVABLE_RUN_FROM_SWAP  0x0400  "If the image is on removable media, fully load it and copy it to the swap file."
-IMAGE_FILE_NET_RUN_FROM_SWAP  0x0800  "If the image is on network media, fully load it and copy it to the swap file."
-IMAGE_FILE_SYSTEM 0x1000  "The image file is a system file, not a user program."
-IMAGE_FILE_DLL  0x2000  "The image file is a dynamic-link library (DLL). Such files are considered executable files for almost all purposes, although they cannot be directly run."
-IMAGE_FILE_UP_SYSTEM_ONLY 0x4000  "The file should be run only on a uniprocessor machine."
-IMAGE_FILE_BYTES_REVERSED_HI  0x8000  "Big endian: the MSB precedes the LSB in memory. This flag is deprecated and should be zero."
+"BYTES_REVERSED_LO"  0x0080  "Little endian: the least significant bit (LSB) precedes the most significant bit (MSB) in memory. This flag is deprecated and should be zero."
+"32BIT_MACHINE"  0x0100  "Machine is based on a 32-bit-word architecture."
+"DEBUG_STRIPPED" 0x0200  "Debugging information is removed from the image file."
+"REMOVABLE_RUN_FROM_SWAP"  0x0400  "If the image is on removable media, fully load it and copy it to the swap file."
+"NET_RUN_FROM_SWAP"  0x0800  "If the image is on network media, fully load it and copy it to the swap file."
+"SYSTEM" 0x1000  "The image file is a system file, not a user program."
+"DLL"  0x2000  "The image file is a dynamic-link library (DLL). Such files are considered executable files for almost all purposes, although they cannot be directly run."
+"UP_SYSTEM_ONLY" 0x4000  "The file should be run only on a uniprocessor machine."
+"BYTES_REVERSED_HI"  0x8000  "Big endian: the MSB precedes the LSB in memory. This flag is deprecated and should be zero."
 
 class PE32OptionalHeader {
   #view;
