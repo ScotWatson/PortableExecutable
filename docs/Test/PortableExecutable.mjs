@@ -10,56 +10,136 @@ import * as Memory from "https://scotwatson.github.io/Memory/Test/Memory.mjs";
 class COFFFileHeader {
   #view;
   constructor(args) {
-    this.#view = args;
+    try {
+      this.#view = args;
+      if (args.byteLength !== 20) {
+        throw "COFFFileHeader requires a byteLength of 20.";
+      }
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "COFFFileHeader constructor",
+        error: e,
+      });
+    }
   }
   get viewMachine() {
-    return this.#view.createSlice({
-      start: 0,
-      end: 2,
-      byteLength: 2,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 0,
+        end: 2,
+        byteLength: 2,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewMachine",
+        error: e,
+      });
+    }
+  }
+  set viewMachine() {
+    throw "COFFFileHeader.viewMachine cannot be set.";
   }
   get viewNumberOfSections() {
-    return this.#view.createSlice({
-      start: 2,
-      end: 4,
-      byteLength: 2,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 2,
+        end: 4,
+        byteLength: 2,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewNumberOfSections",
+        error: e,
+      });
+    }
+  }
+  set viewNumberOfSections() {
+    throw "COFFFileHeader.viewNumberOfSections cannot be set.";
   }
   get viewTimeDateStamp() {
-    return this.#view.createSlice({
-      start: 4,
-      end: 8,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 4,
+        end: 8,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewTimeDateStamp",
+        error: e,
+      });
+    }
+  }
+  set viewTimeDateStamp() {
+    throw "COFFFileHeader.viewTimeDateStamp cannot be set.";
   }
   get viewPointerToSymbolTable() {
-    return this.#view.createSlice({
-      start: 8,
-      end: 12,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 8,
+        end: 12,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewPointerToSymbolTable",
+        error: e,
+      });
+    }
+  }
+  set viewPointerToSymbolTable() {
+    throw "COFFFileHeader.viewPointerToSymbolTable cannot be set.";
   }
   get viewNumberOfSymbols() {
-    return this.#view.createSlice({
-      start: 12,
-      end: 16,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 12,
+        end: 16,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewNumberOfSymbols",
+        error: e,
+      });
+    }
+  }
+  set viewNumberOfSymbols() {
+    throw "COFFFileHeader.viewNumberOfSymbols cannot be set.";
   }
   get viewSizeOfOptionalHeader() {
-    return this.#view.createSlice({
-      start: 16,
-      end: 18,
-      byteLength: 2,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 16,
+        end: 18,
+        byteLength: 2,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewSizeOfOptionalHeader",
+        error: e,
+      });
+    }
+  }
+  set viewNumberOfSymbols() {
+    throw "COFFFileHeader.viewSizeOfOptionalHeader cannot be set.";
   }
   get viewCharacteristics() {
-    return this.#view.createSlice({
-      start: 18,
-      end: 20,
-      byteLength: 2,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 18,
+        end: 20,
+        byteLength: 2,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.viewCharacteristics",
+        error: e,
+      });
+    }
+  }
+  set viewCharacteristics() {
+    throw "COFFFileHeader.viewCharacteristics cannot be set.";
   }
 };
 
@@ -135,91 +215,181 @@ const IMAGE_FILE_MACHINE_INV = (function () {
 })();
 
 IMAGE_FILE
-"RELOCS_STRIPPED"  0x0001  "Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the loader reports an error. The default behavior of the linker is to strip base relocations from executable (EXE) files."
-"EXECUTABLE_IMAGE" 0x0002  "Image only. This indicates that the image file is valid and can be run. If this flag is not set, it indicates a linker error."
-"LINE_NUMS_STRIPPED" 0x0004  "COFF line numbers have been removed. This flag is deprecated and should be zero."
-"LOCAL_SYMS_STRIPPED"  0x0008  "COFF symbol table entries for local symbols have been removed. This flag is deprecated and should be zero."
-"AGGRESSIVE_WS_TRIM" 0x0010  "Obsolete. Aggressively trim working set. This flag is deprecated for Windows 2000 and later and must be zero."
-"LARGE_ADDRESS_AWARE"  0x0020  "Application can handle > 2-GB addresses."
-  0x0040  "This flag is reserved for future use."
-"BYTES_REVERSED_LO"  0x0080  "Little endian: the least significant bit (LSB) precedes the most significant bit (MSB) in memory. This flag is deprecated and should be zero."
-"32BIT_MACHINE"  0x0100  "Machine is based on a 32-bit-word architecture."
-"DEBUG_STRIPPED" 0x0200  "Debugging information is removed from the image file."
-"REMOVABLE_RUN_FROM_SWAP"  0x0400  "If the image is on removable media, fully load it and copy it to the swap file."
-"NET_RUN_FROM_SWAP"  0x0800  "If the image is on network media, fully load it and copy it to the swap file."
-"SYSTEM" 0x1000  "The image file is a system file, not a user program."
-"DLL"  0x2000  "The image file is a dynamic-link library (DLL). Such files are considered executable files for almost all purposes, although they cannot be directly run."
-"UP_SYSTEM_ONLY" 0x4000  "The file should be run only on a uniprocessor machine."
-"BYTES_REVERSED_HI"  0x8000  "Big endian: the MSB precedes the LSB in memory. This flag is deprecated and should be zero."
+"RELOCS_STRIPPED"  0x0001  // Image only, Windows CE, and Microsoft Windows NT and later. This indicates that the file does not contain base relocations and must therefore be loaded at its preferred base address. If the base address is not available, the loader reports an error. The default behavior of the linker is to strip base relocations from executable (EXE) files.
+"EXECUTABLE_IMAGE" 0x0002  // Image only. This indicates that the image file is valid and can be run. If this flag is not set, it indicates a linker error.
+"LINE_NUMS_STRIPPED" 0x0004  // COFF line numbers have been removed. This flag is deprecated and should be zero.
+"LOCAL_SYMS_STRIPPED"  0x0008  // COFF symbol table entries for local symbols have been removed. This flag is deprecated and should be zero.
+"AGGRESSIVE_WS_TRIM" 0x0010  // Obsolete. Aggressively trim working set. This flag is deprecated for Windows 2000 and later and must be zero.
+"LARGE_ADDRESS_AWARE"  0x0020  // Application can handle > 2-GB addresses.
+  0x0040  // This flag is reserved for future use.
+"BYTES_REVERSED_LO"  0x0080  // Little endian: the least significant bit (LSB) precedes the most significant bit (MSB) in memory. This flag is deprecated and should be zero.
+"32BIT_MACHINE"  0x0100  // Machine is based on a 32-bit-word architecture.
+"DEBUG_STRIPPED" 0x0200  // Debugging information is removed from the image file.
+"REMOVABLE_RUN_FROM_SWAP"  0x0400  // If the image is on removable media, fully load it and copy it to the swap file.
+"NET_RUN_FROM_SWAP"  0x0800  // If the image is on network media, fully load it and copy it to the swap file.
+"SYSTEM" 0x1000  // The image file is a system file, not a user program.
+"DLL"  0x2000  // The image file is a dynamic-link library (DLL). Such files are considered executable files for almost all purposes, although they cannot be directly run.
+"UP_SYSTEM_ONLY" 0x4000  // The file should be run only on a uniprocessor machine.
+"BYTES_REVERSED_HI"  0x8000  // Big endian: the MSB precedes the LSB in memory. This flag is deprecated and should be zero.
 
 class PE32OptionalHeader {
   #view;
   constructor(args) {
-    this.#view = args;
+    try {
+      this.#view = args;
+      if (args.byteLength !== 20) {
+        throw "PE32OptionalHeader requires a byteLength of 20.";
+      }
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "PE32OptionalHeader constructor",
+        error: e,
+      });
+    }
   }
   // The unsigned integer that identifies the state of the image file. The most common number is 0x10B, which identifies it as a normal executable file. 0x107 identifies it as a ROM image, and 0x20B identifies it as a PE32+ executable.
   get viewMagic() {
-    return this.#view.createSlice({
-      start: 0,
-      end: 2,
-      byteLength: 2,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 0,
+        end: 2,
+        byteLength: 2,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewMagic",
+        error: e,
+      });
+    }
+  }
+  set viewMagic() {
+    throw "PE32OptionalHeader.viewMagic cannot be set.";
   }
   // The linker major version number.
   get viewMajorLinkerVersion() {
-    return this.#view.createSlice({
-      start: 2,
-      end: 3,
-      byteLength: 1,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 2,
+        end: 3,
+        byteLength: 1,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewMajorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set viewMajorLinkerVersion() {
+    throw "PE32OptionalHeader.viewMajorLinkerVersion cannot be set.";
   }
   // The linker minor version number.
   get viewMinorLinkerVersion() {
-    return this.#view.createSlice({
-      start: 3,
-      end: 4,
-      byteLength: 1,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 3,
+        end: 4,
+        byteLength: 1,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewMinorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set viewMinorLinkerVersion() {
+    throw "PE32OptionalHeader.viewMinorLinkerVersion cannot be set.";
   }
   // The size of the code (text) section, or the sum of all code sections if there are multiple sections.
   get viewSizeOfCode() {
-    return this.#view.createSlice({
-      start: 4,
-      end: 8,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 4,
+        end: 8,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewSizeOfCode",
+        error: e,
+      });
+    }
+  }
+  set viewSizeOfCode() {
+    throw "PE32OptionalHeader.viewSizeOfCode cannot be set.";
   }
   // The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
   get viewSizeOfInitializedData() {
-    return this.#view.createSlice({
-      start: 8,
-      end: 12,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 8,
+        end: 12,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewSizeOfInitializedData",
+        error: e,
+      });
+    }
+  }
+  set viewSizeOfInitializedData() {
+    throw "PE32OptionalHeader.viewSizeOfInitializedData cannot be set.";
   }
   // The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
   get viewSizeOfUninitializedData() {
-    return this.#view.createSlice({
-      start: 12,
-      end: 16,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 12,
+        end: 16,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewSizeOfUninitializedData",
+        error: e,
+      });
+    }
+  }
+  set viewSizeOfUninitializedData() {
+    throw "PE32OptionalHeader.viewSizeOfUninitializedData cannot be set.";
   }
   // The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
   get viewAddressOfEntryPoint() {
-    return this.#view.createSlice({
-      start: 16,
-      end: 20,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 16,
+        end: 20,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewAddressOfEntryPoint",
+        error: e,
+      });
+    }
+  }
+  set viewAddressOfEntryPoint() {
+    throw "PE32OptionalHeader.viewAddressOfEntryPoint cannot be set.";
   }
   // The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
   get viewBaseOfCode() {
-    return this.#view.createSlice({
-      start: 20,
-      end: 24,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 20,
+        end: 24,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32OptionalHeader.viewBaseOfCode",
+        error: e,
+      });
+    }
+  }
+  set viewBaseOfCode() {
+    throw "PE32OptionalHeader.viewBaseOfCode cannot be set.";
   }
 };
 
@@ -230,74 +400,164 @@ class PE32PlusOptionalHeader {
   }
   // The unsigned integer that identifies the state of the image file. The most common number is 0x10B, which identifies it as a normal executable file. 0x107 identifies it as a ROM image, and 0x20B identifies it as a PE32+ executable.
   get viewMagic() {
-    return this.#view.createSlice({
-      start: 0,
-      end: 2,
-      byteLength: 2,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 0,
+        end: 2,
+        byteLength: 2,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewMagic",
+        error: e,
+      });
+    }
+  }
+  set viewMagic() {
+    throw "PE32PlusOptionalHeader.viewMagic cannot be set.";
   }
   // The linker major version number.
   get viewMajorLinkerVersion() {
-    return this.#view.createSlice({
-      start: 2,
-      end: 3,
-      byteLength: 1,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 2,
+        end: 3,
+        byteLength: 1,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewMajorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set viewMajorLinkerVersion() {
+    throw "PE32PlusOptionalHeader.viewMajorLinkerVersion cannot be set.";
   }
   // The linker minor version number.
   get viewMinorLinkerVersion() {
-    return this.#view.createSlice({
-      start: 3,
-      end: 4,
-      byteLength: 1,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 3,
+        end: 4,
+        byteLength: 1,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewMinorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set viewMinorLinkerVersion() {
+    throw "PE32PlusOptionalHeader.viewMinorLinkerVersion cannot be set.";
   }
   // The size of the code (text) section, or the sum of all code sections if there are multiple sections.
   get viewSizeOfCode() {
-    return this.#view.createSlice({
-      start: 4,
-      end: 8,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 4,
+        end: 8,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewSizeOfCode",
+        error: e,
+      });
+    }
+  }
+  set viewSizeOfCode() {
+    throw "PE32PlusOptionalHeader.viewSizeOfCode cannot be set.";
   }
   // The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
   get viewSizeOfInitializedData() {
-    return this.#view.createSlice({
-      start: 8,
-      end: 12,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 8,
+        end: 12,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewSizeOfInitializedData",
+        error: e,
+      });
+    }
+  }
+  set viewSizeOfInitializedData() {
+    throw "PE32PlusOptionalHeader.viewSizeOfInitializedData cannot be set.";
   }
   // The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
   get viewSizeOfUninitializedData() {
-    return this.#view.createSlice({
-      start: 12,
-      end: 16,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 12,
+        end: 16,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewSizeOfUninitializedData",
+        error: e,
+      });
+    }
+  }
+  set viewSizeOfUninitializedData() {
+    throw "PE32PlusOptionalHeader.viewSizeOfUninitializedData cannot be set.";
   }
   // The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
   get viewAddressOfEntryPoint() {
-    return this.#view.createSlice({
-      start: 16,
-      end: 20,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 16,
+        end: 20,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewAddressOfEntryPoint",
+        error: e,
+      });
+    }
+  }
+  set viewAddressOfEntryPoint() {
+    throw "PE32PlusOptionalHeader.viewAddressOfEntryPoint cannot be set.";
   }
   // The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
   get viewBaseOfCode() {
-    return this.#view.createSlice({
-      start: 20,
-      end: 24,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 20,
+        end: 24,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewBaseOfCode",
+        error: e,
+      });
+    }
+  }
+  set viewBaseOfCode() {
+    throw "PE32PlusOptionalHeader.viewBaseOfCode cannot be set.";
   }
   // The address that is relative to the image base of the beginning-of-data section when it is loaded into memory.
   get viewBaseOfData() {
-    return this.#view.createSlice({
-      start: 20,
-      end: 24,
-      byteLength: 4,
-    });
+    try {
+      return this.#view.createSlice({
+        start: 24,
+        end: 28,
+        byteLength: 4,
+      });
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get PE32PlusOptionalHeader.viewBaseOfData",
+        error: e,
+      });
+    }
+  }
+  set viewBaseOfData() {
+    throw "PE32PlusOptionalHeader.viewBaseOfData cannot be set.";
   }
 };
