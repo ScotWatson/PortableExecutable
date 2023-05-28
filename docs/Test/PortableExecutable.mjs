@@ -39,6 +39,28 @@ class COFFFileHeader {
   set viewMachine() {
     throw "COFFFileHeader.viewMachine cannot be set.";
   }
+  get machine() {
+    try {
+      let data = new Memory.Uint16LE(this.viewMachine);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.machine",
+        error: e,
+      });
+    }
+  }
+  set machine(newVal) {
+    try {
+      let data = new Memory.Uint16LE(this.viewMachine);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.machine",
+        error: e,
+      });
+    }
+  }
   get viewNumberOfSections() {
     try {
       return this.#view.createSlice({
@@ -56,6 +78,28 @@ class COFFFileHeader {
   set viewNumberOfSections() {
     throw "COFFFileHeader.viewNumberOfSections cannot be set.";
   }
+  get numberOfSections() {
+    try {
+      let data = new Memory.Uint16LE(this.viewNumberOfSections);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.numberOfSections",
+        error: e,
+      });
+    }
+  }
+  set numberOfSections(newVal) {
+    try {
+      let data = new Memory.Uint16LE(this.viewNumberOfSections);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.numberOfSections",
+        error: e,
+      });
+    }
+  }
   get viewTimeDateStamp() {
     try {
       return this.#view.createSlice({
@@ -72,6 +116,36 @@ class COFFFileHeader {
   }
   set viewTimeDateStamp() {
     throw "COFFFileHeader.viewTimeDateStamp cannot be set.";
+  }
+  get timeDateStamp() {
+    try {
+      let int_data = new Memory.Sint32LE(this.viewTimeDateStamp);
+      if ((int_data == 0) || (int_data == -1)) {
+        return new Date(NaN);
+      }
+      let data = new Memory.Time_POSIX_S32LE(this.viewTimeDateStamp);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.timeDateStamp",
+        error: e,
+      });
+    }
+  }
+  set timeDateStamp(newVal) {
+    try {
+      if (newVal.getTime() === NaN) {
+        let int_data = new Memory.Sint32LE(this.viewTimeDateStamp);
+        int_data.value = -1;
+      }
+      let data = new Memory.Time_POSIX_S32LE(this.viewTimeDateStamp);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.timeDateStamp",
+        error: e,
+      });
+    }
   }
   get viewPointerToSymbolTable() {
     try {
