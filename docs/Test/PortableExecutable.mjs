@@ -164,6 +164,28 @@ class COFFFileHeader {
   set viewPointerToSymbolTable() {
     throw "COFFFileHeader.viewPointerToSymbolTable cannot be set.";
   }
+  get pointerToSymbolTable() {
+    try {
+      let data = new Memory.Uint32LE(this.viewPointerToSymbolTable);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.pointerToSymbolTable",
+        error: e,
+      });
+    }
+  }
+  set pointerToSymbolTable(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewPointerToSymbolTable);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.pointerToSymbolTable",
+        error: e,
+      });
+    }
+  }
   get viewNumberOfSymbols() {
     try {
       return this.#view.createSlice({
@@ -181,6 +203,28 @@ class COFFFileHeader {
   set viewNumberOfSymbols() {
     throw "COFFFileHeader.viewNumberOfSymbols cannot be set.";
   }
+  get numberOfSymbols() {
+    try {
+      let data = new Memory.Uint32LE(this.viewNumberOfSymbols);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.numberOfSymbols",
+        error: e,
+      });
+    }
+  }
+  set numberOfSymbols(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewNumberOfSymbols);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.numberOfSymbols",
+        error: e,
+      });
+    }
+  }
   get viewSizeOfOptionalHeader() {
     try {
       return this.#view.createSlice({
@@ -195,8 +239,30 @@ class COFFFileHeader {
       });
     }
   }
-  set viewNumberOfSymbols() {
+  set viewSizeOfOptionalHeader() {
     throw "COFFFileHeader.viewSizeOfOptionalHeader cannot be set.";
+  }
+  get sizeOfOptionalHeader() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfOptionalHeader);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfOptionalHeader",
+        error: e,
+      });
+    }
+  }
+  set sizeOfOptionalHeader(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfOptionalHeader);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfOptionalHeader",
+        error: e,
+      });
+    }
   }
   get viewCharacteristics() {
     try {
@@ -214,6 +280,28 @@ class COFFFileHeader {
   }
   set viewCharacteristics() {
     throw "COFFFileHeader.viewCharacteristics cannot be set.";
+  }
+  get characteristics() {
+    try {
+      let data = new Memory.Uint16LE(this.viewCharacteristics);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.characteristics",
+        error: e,
+      });
+    }
+  }
+  set characteristics(newVal) {
+    try {
+      let data = new Memory.Uint16LE(this.viewCharacteristics);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.characteristics",
+        error: e,
+      });
+    }
   }
 };
 
@@ -339,6 +427,28 @@ class PE32OptionalHeader {
   set viewMagic() {
     throw "PE32OptionalHeader.viewMagic cannot be set.";
   }
+  get magic() {
+    try {
+      let data = new Memory.Uint16LE(this.viewMagic);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.magic",
+        error: e,
+      });
+    }
+  }
+  set magic(newVal) {
+    try {
+      let data = new Memory.Uint16LE(this.viewMagic);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.magic",
+        error: e,
+      });
+    }
+  }
   // The linker major version number.
   get viewMajorLinkerVersion() {
     try {
@@ -356,6 +466,28 @@ class PE32OptionalHeader {
   }
   set viewMajorLinkerVersion() {
     throw "PE32OptionalHeader.viewMajorLinkerVersion cannot be set.";
+  }
+  get majorLinkerVersion() {
+    try {
+      let data = new Memory.Uint8(this.viewMajorLinkerVersion);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.majorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set majorLinkerVersion(newVal) {
+    try {
+      let data = new Memory.Uint8(this.viewMajorLinkerVersion);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.majorLinkerVersion",
+        error: e,
+      });
+    }
   }
   // The linker minor version number.
   get viewMinorLinkerVersion() {
@@ -375,6 +507,28 @@ class PE32OptionalHeader {
   set viewMinorLinkerVersion() {
     throw "PE32OptionalHeader.viewMinorLinkerVersion cannot be set.";
   }
+  get minorLinkerVersion() {
+    try {
+      let data = new Memory.Uint8(this.viewMinorLinkerVersion);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.minorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set minorLinkerVersion(newVal) {
+    try {
+      let data = new Memory.Uint8(this.viewMinorLinkerVersion);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.minorLinkerVersion",
+        error: e,
+      });
+    }
+  }
   // The size of the code (text) section, or the sum of all code sections if there are multiple sections.
   get viewSizeOfCode() {
     try {
@@ -392,6 +546,28 @@ class PE32OptionalHeader {
   }
   set viewSizeOfCode() {
     throw "PE32OptionalHeader.viewSizeOfCode cannot be set.";
+  }
+  get sizeOfCode() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfCode);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfCode",
+        error: e,
+      });
+    }
+  }
+  set sizeOfCode(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfCode);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfCode",
+        error: e,
+      });
+    }
   }
   // The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
   get viewSizeOfInitializedData() {
@@ -411,6 +587,28 @@ class PE32OptionalHeader {
   set viewSizeOfInitializedData() {
     throw "PE32OptionalHeader.viewSizeOfInitializedData cannot be set.";
   }
+  get sizeOfInitializedData() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfInitializedData);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfInitializedData",
+        error: e,
+      });
+    }
+  }
+  set sizeOfInitializedData(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfInitializedData);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfInitializedData",
+        error: e,
+      });
+    }
+  }
   // The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
   get viewSizeOfUninitializedData() {
     try {
@@ -428,6 +626,28 @@ class PE32OptionalHeader {
   }
   set viewSizeOfUninitializedData() {
     throw "PE32OptionalHeader.viewSizeOfUninitializedData cannot be set.";
+  }
+  get sizeOfUninitializedData() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfInitializedData);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfUninitializedData",
+        error: e,
+      });
+    }
+  }
+  set sizeOfUninitializedData(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfInitializedData);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfUninitializedData",
+        error: e,
+      });
+    }
   }
   // The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
   get viewAddressOfEntryPoint() {
@@ -447,6 +667,28 @@ class PE32OptionalHeader {
   set viewAddressOfEntryPoint() {
     throw "PE32OptionalHeader.viewAddressOfEntryPoint cannot be set.";
   }
+  get addressOfEntryPoint() {
+    try {
+      let data = new Memory.Uint32LE(this.viewAddressOfEntryPoint);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.addressOfEntryPoint",
+        error: e,
+      });
+    }
+  }
+  set addressOfEntryPoint(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewAddressOfEntryPoint);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.addressOfEntryPoint",
+        error: e,
+      });
+    }
+  }
   // The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
   get viewBaseOfCode() {
     try {
@@ -464,6 +706,28 @@ class PE32OptionalHeader {
   }
   set viewBaseOfCode() {
     throw "PE32OptionalHeader.viewBaseOfCode cannot be set.";
+  }
+  get baseOfCode() {
+    try {
+      let data = new Memory.Uint32LE(this.viewBaseOfCode);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.baseOfCode",
+        error: e,
+      });
+    }
+  }
+  set baseOfCode(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewBaseOfCode);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.baseOfCode",
+        error: e,
+      });
+    }
   }
 };
 
@@ -490,6 +754,28 @@ class PE32PlusOptionalHeader {
   set viewMagic() {
     throw "PE32PlusOptionalHeader.viewMagic cannot be set.";
   }
+  get magic() {
+    try {
+      let data = new Memory.Uint16LE(this.viewMagic);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.magic",
+        error: e,
+      });
+    }
+  }
+  set magic(newVal) {
+    try {
+      let data = new Memory.Uint16LE(this.viewMagic);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.magic",
+        error: e,
+      });
+    }
+  }
   // The linker major version number.
   get viewMajorLinkerVersion() {
     try {
@@ -507,6 +793,28 @@ class PE32PlusOptionalHeader {
   }
   set viewMajorLinkerVersion() {
     throw "PE32PlusOptionalHeader.viewMajorLinkerVersion cannot be set.";
+  }
+  get majorLinkerVersion() {
+    try {
+      let data = new Memory.Uint8(this.viewMajorLinkerVersion);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.majorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set majorLinkerVersion(newVal) {
+    try {
+      let data = new Memory.Uint8(this.viewMajorLinkerVersion);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.majorLinkerVersion",
+        error: e,
+      });
+    }
   }
   // The linker minor version number.
   get viewMinorLinkerVersion() {
@@ -526,6 +834,28 @@ class PE32PlusOptionalHeader {
   set viewMinorLinkerVersion() {
     throw "PE32PlusOptionalHeader.viewMinorLinkerVersion cannot be set.";
   }
+  get minorLinkerVersion() {
+    try {
+      let data = new Memory.Uint8(this.viewMinorLinkerVersion);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.minorLinkerVersion",
+        error: e,
+      });
+    }
+  }
+  set minorLinkerVersion(newVal) {
+    try {
+      let data = new Memory.Uint8(this.viewMinorLinkerVersion);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.minorLinkerVersion",
+        error: e,
+      });
+    }
+  }
   // The size of the code (text) section, or the sum of all code sections if there are multiple sections.
   get viewSizeOfCode() {
     try {
@@ -543,6 +873,28 @@ class PE32PlusOptionalHeader {
   }
   set viewSizeOfCode() {
     throw "PE32PlusOptionalHeader.viewSizeOfCode cannot be set.";
+  }
+  get sizeOfCode() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfCode);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfCode",
+        error: e,
+      });
+    }
+  }
+  set sizeOfCode(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfCode);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfCode",
+        error: e,
+      });
+    }
   }
   // The size of the initialized data section, or the sum of all such sections if there are multiple data sections.
   get viewSizeOfInitializedData() {
@@ -562,6 +914,28 @@ class PE32PlusOptionalHeader {
   set viewSizeOfInitializedData() {
     throw "PE32PlusOptionalHeader.viewSizeOfInitializedData cannot be set.";
   }
+  get sizeOfInitializedData() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfInitializedData);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfInitializedData",
+        error: e,
+      });
+    }
+  }
+  set sizeOfInitializedData(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfInitializedData);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfInitializedData",
+        error: e,
+      });
+    }
+  }
   // The size of the uninitialized data section (BSS), or the sum of all such sections if there are multiple BSS sections.
   get viewSizeOfUninitializedData() {
     try {
@@ -579,6 +953,28 @@ class PE32PlusOptionalHeader {
   }
   set viewSizeOfUninitializedData() {
     throw "PE32PlusOptionalHeader.viewSizeOfUninitializedData cannot be set.";
+  }
+  get sizeOfUninitializedData() {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfUninitializedData);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.sizeOfUninitializedData",
+        error: e,
+      });
+    }
+  }
+  set sizeOfUninitializedData(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewSizeOfUninitializedData);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.sizeOfUninitializedData",
+        error: e,
+      });
+    }
   }
   // The address of the entry point relative to the image base when the executable file is loaded into memory. For program images, this is the starting address. For device drivers, this is the address of the initialization function. An entry point is optional for DLLs. When no entry point is present, this field must be zero.
   get viewAddressOfEntryPoint() {
@@ -598,6 +994,28 @@ class PE32PlusOptionalHeader {
   set viewAddressOfEntryPoint() {
     throw "PE32PlusOptionalHeader.viewAddressOfEntryPoint cannot be set.";
   }
+  get addressOfEntryPoint() {
+    try {
+      let data = new Memory.Uint32LE(this.viewAddressOfEntryPoint);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.addressOfEntryPoint",
+        error: e,
+      });
+    }
+  }
+  set addressOfEntryPoint(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewAddressOfEntryPoint);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.addressOfEntryPoint",
+        error: e,
+      });
+    }
+  }
   // The address that is relative to the image base of the beginning-of-code section when it is loaded into memory.
   get viewBaseOfCode() {
     try {
@@ -616,6 +1034,28 @@ class PE32PlusOptionalHeader {
   set viewBaseOfCode() {
     throw "PE32PlusOptionalHeader.viewBaseOfCode cannot be set.";
   }
+  get baseOfCode() {
+    try {
+      let data = new Memory.Uint32LE(this.viewBaseOfCode);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.baseOfCode",
+        error: e,
+      });
+    }
+  }
+  set baseOfCode(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewBaseOfCode);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.baseOfCode",
+        error: e,
+      });
+    }
+  }
   // The address that is relative to the image base of the beginning-of-data section when it is loaded into memory.
   get viewBaseOfData() {
     try {
@@ -633,5 +1073,27 @@ class PE32PlusOptionalHeader {
   }
   set viewBaseOfData() {
     throw "PE32PlusOptionalHeader.viewBaseOfData cannot be set.";
+  }
+  get baseOfData() {
+    try {
+      let data = new Memory.Uint32LE(this.viewBaseOfData);
+      return data.value;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "get COFFFileHeader.baseOfData",
+        error: e,
+      });
+    }
+  }
+  set baseOfCode(newVal) {
+    try {
+      let data = new Memory.Uint32LE(this.viewBaseOfData);
+      data.value = newVal;
+    } catch (e) {
+      ErrorLog.rethrow({
+        functionName: "set COFFFileHeader.baseOfData",
+        error: e,
+      });
+    }
   }
 };
