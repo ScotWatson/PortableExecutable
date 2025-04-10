@@ -7,6 +7,37 @@ import * as ErrorLog from "https://scotwatson.github.io/Debug/Test/ErrorLog.mjs"
 import * as Types from "https://scotwatson.github.io/Debug/Test/Types.mjs";
 import * as Memory from "https://scotwatson.github.io/Memory/Test/Memory.mjs";
 
+// This function reads 0x40 bytes and returns the DOS header object
+function readDOSHeader(input) {
+  const ret = {};
+  const magic_number = await input.readUint16LE();
+  if (magic_number !== 0x5A4D) {
+    throw new Error("magic_number must be 'MZ'");
+  }
+  ret.e_cblp = await input.readUint16LE();
+  ret.e_cp = await input.readUint16LE();
+  ret.e_crlc = await input.readUint16LE();
+  ret.e_cparhdr = await input.readUint16LE();
+  ret.e_minalloc = await input.readUint16LE();
+  ret.e_maxalloc = await input.readUint16LE();
+  ret.e_ss = await input.readUint16LE();
+  ret.e_sp = await input.readUint16LE();
+  ret.e_csum = await input.readUint16LE();
+  ret.e_ip = await input.readUint16LE();
+  ret.e_cs = await input.readUint16LE();
+  ret.e_lfarlc = await input.readUint16LE();
+  ret.e_ovno = await input.readUint16LE();
+  await input.skipBytes(8);
+  ret.e_oemid = await input.readUint16LE();
+  ret.e_oeminfo = await input.readUint16LE();
+  await input.skipBytes(20);
+  ret.e_lfanew = await input.readUint32LE();
+  return ret;
+}
+function readCOFFFileHeader(input) {
+  input.read
+}
+
 class COFFFileHeader {
   #view;
   constructor(args) {
