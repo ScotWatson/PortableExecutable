@@ -3,10 +3,133 @@
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import * as ErrorLog from "https://scotwatson.github.io/Debug/Test/ErrorLog.mjs";
-import * as Types from "https://scotwatson.github.io/Debug/Test/Types.mjs";
-import * as Memory from "https://scotwatson.github.io/Memory/Test/Memory.mjs";
+/*
+const mod = byte >> 6;
+const reg = (byte >> 3) & 0x07;
+const r_m = byte & 0x07;
+async function wait_for_mod_reg_r_m() {
+  const byte = getByte();
+  const mod = byte >> 6;
+  const reg = (byte >> 3) & 0x07;
+  const r_m = byte & 0x07;
+  let disp;
+  switch (mod) {
+    case 0:
+      if (r_m === 6) {
+        disp = getDisp16();
+      } else {
+        disp = 0;
+      }
+    case 1:
+      disp = getDisp8();
+    case 2:
+      disp = getDisp16();
+    case 3:
+      disp = reg8() or reg16();
+  }
+}
+switch (mod) {
+  case 0:
+    const op = APU_op(reg);
+    return ();
+  case 1:
+  case 2:
+  case 3:
+}
 
+function ea_of_r_m(x) {
+  switch (x) {
+    case 0:
+      return "[BX+SI+" +  + "]";
+    case 1:
+      return "[BX+DI+" +  + "]";
+    case 2:
+      return "[BP+SI+" +  + "]";
+    case 3:
+      return "[BP+DI+" +  + "]";
+    case 4:
+      return "[SI+" +  + "]";
+    case 5:
+      return "[DI+" +  + "]";
+    case 6:
+      return "[BX+" +  + "]";
+    case 7:
+      return "[BP+" +  + "]";
+  }
+}
+function APU_op(x) {
+  switch (x) {
+    case 0:
+      return "ADD";
+    case 1:
+      return "OR";
+    case 2:
+      return "ADC";
+    case 3:
+      return "SBB";
+    case 4:
+      return "AND";
+    case 5:
+      return "SUB";
+    case 6:
+      return "XOR";
+    case 7:
+      return "CMP";
+  }
+}
+function reg8(x) {
+  switch (x) {
+    case 0:
+      return "AL";
+    case 1:
+      return "CL";
+    case 2:
+      return "DL";
+    case 3:
+      return "BL";
+    case 4:
+      return "AH";
+    case 5:
+      return "CH";
+    case 6:
+      return "DH";
+    case 7:
+      return "BH";
+  }
+}
+function reg16(x) {
+  switch (x) {
+    case 0:
+      return "AX";
+    case 1:
+      return "CX";
+    case 2:
+      return "DX";
+    case 3:
+      return "BX";
+    case 4:
+      return "SP";
+    case 5:
+      return "BP";
+    case 6:
+      return "SI";
+    case 7:
+      return "DI";
+  }
+}
+function seg(x) {
+  switch (x) {
+    case 0:
+      return "ES";
+    case 1:
+      return "CS";
+    case 2:
+      return "SS";
+    case 3:
+      return "DS";
+  }
+}
+*/
 // This function reads 0x40 bytes and returns the DOS header object
 function readDOSHeader(input) {
   const ret = {};
@@ -32,10 +155,98 @@ function readDOSHeader(input) {
   ret.e_oeminfo = await input.readUint16LE();
   await input.skipBytes(20);
   ret.e_lfanew = await input.readUint32LE();
+  ret.exe_offset = ret.e_cparhdr * 16;
+  ret.exe_size = DOSHeader.e_cblp === 0 ? DOSHeader.e_cp * 512 : (DOSHeader.e_cp - 1) * 512 + DOSHeader.e_cblp;
+  ret.reloc_offset = ret.e_lfarlc;
+  ret.reloc_num = ret.e_crlc;
   return ret;
 }
 function readCOFFFileHeader(input) {
-  input.read
+  const DOSHeader = readDOSHeader();
+  input.skipBytes(DOSHeader.e_lfanew - 0x40);
+  const signature = input.readUint32();
+  if (signature !== 0x00004550) {
+    throw new Error("bad signature");
+  }
+  ret.machine = await input.readUint16LE();
+  ret.numSections = await input.readUint16LE();
+  ret.timeDateStamp = await input.readUint32LE();
+  ret.pointerToSymbolTable = await input.readUint32LE();
+  ret.numSymbols = await input.readUint32LE();
+  ret.sizeOfOptionalHeader = await input.readUint16LE();
+  ret.characteristics = await input.readUint16LE();
+  // start optional header
+  ret.optionalMagicNumber = await input.readUint16LE();
+  if (ret.optionalMagicNumber === 0x010B) {
+    ret.majorLinkerVersion = await input.readUint8();
+    ret.minorLinkerVersion = await input.readUint8();
+    ret.sizeOfCode = await input.readUint32LE();
+    ret.sizeOfInitializedData = await input.readUint32LE();
+    ret.sizeOfUninitializedData = await input.readUint32LE();
+    ret.addressOfEntryPoint = await input.readUint32LE();
+    ret.baseOfCode = await input.readUint32LE();
+    ret.baseOfData = await input.readUint32LE();
+    ret.imageBase = await input.readUint32LE();
+    ret.sectionAlignment = await input.readUint32LE();
+    ret.fileAlignment = await input.readUint32LE();
+    ret.majorOSVersion = await input.readUint16LE();
+    ret.minorOSVersion = await input.readUint16LE();
+    ret.majorImageVersion = await input.readUint16LE();
+    ret.minorImageVersion = await input.readUint16LE();
+    ret.majorSubsystemVersion = await input.readUint16LE();
+    ret.minorSubsystemVersion = await input.readUint16LE();
+    ret.Win32VersionValue = await input.readUint32LE();
+    ret.sizeOfImage = await input.readUint32LE();
+    ret.sizeOfHeaders = await input.readUint32LE();
+    ret.checksum = await input.readUint32LE();
+    ret.subsystem = await input.readUint16LE();
+    ret.dllCharacteristics = await input.readUint16LE();
+    ret.sizeOfStackReserve = await input.readUint32LE();
+    ret.sizeOfStackCommit = await input.readUint32LE();
+    ret.sizeOfHeapReserve = await input.readUint32LE();
+    ret.sizeOfHeapCommit = await input.readUint32LE();
+    ret.loaderFlags = await input.readUint32LE();
+    ret.numberOfRvaAndSizes = await input.readUint32LE();
+  } else if (ret.optionalMagicNumber === 0x020B) {
+    ret.majorLinkerVersion = await input.readUint8();
+    ret.minorLinkerVersion = await input.readUint8();
+    ret.sizeOfCode = await input.readUint32LE();
+    ret.sizeOfInitializedData = await input.readUint32LE();
+    ret.sizeOfUninitializedData = await input.readUint32LE();
+    ret.addressOfEntryPoint = await input.readUint32LE();
+    ret.baseOfCode = await input.readUint32LE();
+    ret.imageBase = await input.readUint64LE();
+    ret.sectionAlignment = await input.readUint32LE();
+    ret.fileAlignment = await input.readUint32LE();
+    ret.majorOSVersion = await input.readUint16LE();
+    ret.minorOSVersion = await input.readUint16LE();
+    ret.majorImageVersion = await input.readUint16LE();
+    ret.minorImageVersion = await input.readUint16LE();
+    ret.majorSubsystemVersion = await input.readUint16LE();
+    ret.minorSubsystemVersion = await input.readUint16LE();
+    ret.Win32VersionValue = await input.readUint32LE();
+    ret.sizeOfImage = await input.readUint32LE();
+    ret.sizeOfHeaders = await input.readUint32LE();
+    ret.checksum = await input.readUint32LE();
+    ret.subsystem = await input.readUint16LE();
+    ret.dllCharacteristics = await input.readUint16LE();
+    ret.sizeOfStackReserve = await input.readUint64LE();
+    ret.sizeOfStackCommit = await input.readUint64LE();
+    ret.sizeOfHeapReserve = await input.readUint64LE();
+    ret.sizeOfHeapCommit = await input.readUint64LE();
+    ret.loaderFlags = await input.readUint32LE();
+    ret.numberOfRvaAndSizes = await input.readUint32LE();
+  } else {
+    throw new Error("Bad Optional Header Magic Number");
+  }
+  
+  ret.sections = [];
+  for (let i = 0; i < ret.numSections; ++i) {
+    const section = {};
+    section.virtualAddress = await input.readUint32LE();
+    section.size = await input.readUint32LE();
+    ret.sections.push(section);
+  }
 }
 
 class COFFFileHeader {
