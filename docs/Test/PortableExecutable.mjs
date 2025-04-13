@@ -3,6 +3,144 @@
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+const mapImageSubsystem = new Map();
+mapImageSubsystem.set(0, "UNKNOWN"); // An unknown subsystem
+mapImageSubsystem.set(1, "NATIVE"); // Device drivers and native Windows processes
+mapImageSubsystem.set(2, "WINDOWS_GUI"); // The Windows graphical user interface (GUI) subsystem
+mapImageSubsystem.set(3, "WINDOWS_CUI"); // The Windows character subsystem
+mapImageSubsystem.set(5, "OS2_CUI"); // The OS/2 character subsystem
+mapImageSubsystem.set(7, "POSIX_CUI"); // The Posix character subsystem
+mapImageSubsystem.set(8, "NATIVE_WINDOWS"); // Native Win9x driver
+mapImageSubsystem.set(9, "WINDOWS_CE_GUI"); // Windows CE
+mapImageSubsystem.set(10, "EFI_APPLICATION"); // An Extensible Firmware Interface (EFI) application
+mapImageSubsystem.set(11, "EFI_BOOT_SERVICE_DRIVER"); // An EFI driver with boot services
+mapImageSubsystem.set(12, "EFI_RUNTIME_DRIVER"); // An EFI driver with run-time services
+mapImageSubsystem.set(13, "EFI_ROM"); // An EFI ROM image
+mapImageSubsystem.set(14, "XBOX"); // XBOX
+mapImageSubsystem.set(16, "WINDOWS_BOOT_APPLICATION"); // Windows boot application.
+
+const mapImageDLLCharacteristics = new Map();
+mapImageDLLCharacteristics.set(0x0020, "HIGH_ENTROPY_VA"); // Image can handle a high entropy 64-bit virtual address space.
+mapImageDLLCharacteristics.set(0x0040, "DYNAMIC_BASE"); // DLL can be relocated at load time.
+mapImageDLLCharacteristics.set(0x0080, "FORCE_INTEGRITY"); // Code Integrity checks are enforced.
+mapImageDLLCharacteristics.set(0x0100, "NX_COMPAT"); // Image is NX compatible.
+mapImageDLLCharacteristics.set(0x0200, "NO_ISOLATION"); // Isolation aware, but do not isolate the image.
+mapImageDLLCharacteristics.set(0x0400, "NO_SEH"); // Does not use structured exception (SE) handling. No SE handler may be called in this image.
+mapImageDLLCharacteristics.set(0x0800, "NO_BIND"); // Do not bind the image.
+mapImageDLLCharacteristics.set(0x1000, "APPCONTAINER"); // Image must execute in an AppContainer.
+mapImageDLLCharacteristics.set(0x2000, "WDM_DRIVER"); // A WDM driver.
+mapImageDLLCharacteristics.set(0x4000, "GUARD_CF"); // Image supports Control Flow Guard.
+mapImageDLLCharacteristics.set(0x8000, "TERMINAL_SERVER_AWARE"); // Terminal Server aware.
+
+const mapImageSection = new Map();
+mapImageSection.set(0x00000008, "TYPE_NO_PAD"); // The section should not be padded to the next boundary. This flag is obsolete and is replaced by IMAGE_SCN_ALIGN_1BYTES. This is valid only for object files.
+mapImageSection.set(0x00000020, "CNT_CODE"); // The section contains executable code.
+mapImageSection.set(0x00000040, "CNT_INITIALIZED_DATA"); // The section contains initialized data.
+mapImageSection.set(0x00000080, "CNT_UNINITIALIZED_DATA"); // The section contains uninitialized data.
+mapImageSection.set(0x00000200, "LNK_INFO"); // The section contains comments or other information. The .drectve section has this type. This is valid for object files only.
+mapImageSection.set(0x00000800, "LNK_REMOVE"); // The section will not become part of the image. This is valid only for object files.
+mapImageSection.set(0x00001000, "LNK_COMDAT"); // The section contains COMDAT data. For more information, see COMDAT Sections (Object Only). This is valid only for object files.
+mapImageSection.set(0x00008000, "GPREL"); // The section contains data referenced through the global pointer (GP).
+mapImageSection.set(0x00100000, "ALIGN_1BYTES"); // Align data on a 1-byte boundary. Valid only for object files.
+mapImageSection.set(0x00200000, "ALIGN_2BYTES"); // Align data on a 2-byte boundary. Valid only for object files.
+mapImageSection.set(0x00300000, "ALIGN_4BYTES"); // Align data on a 4-byte boundary. Valid only for object files.
+mapImageSection.set(0x00400000, "ALIGN_8BYTES"); // Align data on an 8-byte boundary. Valid only for object files.
+mapImageSection.set(0x00500000, "ALIGN_16BYTES"); // Align data on a 16-byte boundary. Valid only for object files.
+mapImageSection.set(0x00600000, "ALIGN_32BYTES"); // Align data on a 32-byte boundary. Valid only for object files.
+mapImageSection.set(0x00700000, "ALIGN_64BYTES"); // Align data on a 64-byte boundary. Valid only for object files.
+mapImageSection.set(0x00800000, "ALIGN_128BYTES"); // Align data on a 128-byte boundary. Valid only for object files.
+mapImageSection.set(0x00900000, "ALIGN_256BYTES"); // Align data on a 256-byte boundary. Valid only for object files.
+mapImageSection.set(0x00A00000, "ALIGN_512BYTES"); // Align data on a 512-byte boundary. Valid only for object files.
+mapImageSection.set(0x00B00000, "ALIGN_1024BYTES"); // Align data on a 1024-byte boundary. Valid only for object files.
+mapImageSection.set(0x00C00000, "ALIGN_2048BYTES"); // Align data on a 2048-byte boundary. Valid only for object files.
+mapImageSection.set(0x00D00000, "ALIGN_4096BYTES"); // Align data on a 4096-byte boundary. Valid only for object files.
+mapImageSection.set(0x00E00000, "ALIGN_8192BYTES"); // Align data on an 8192-byte boundary. Valid only for object files.
+mapImageSection.set(0x01000000, "LNK_NRELOC_OVFL"); // The section contains extended relocations.
+mapImageSection.set(0x02000000, "MEM_DISCARDABLE"); // The section can be discarded as needed.
+mapImageSection.set(0x04000000, "MEM_NOT_CACHED"); // The section cannot be cached.
+mapImageSection.set(0x08000000, "MEM_NOT_PAGED"); // The section is not pageable.
+mapImageSection.set(0x10000000, "MEM_SHARED"); // The section can be shared in memory.
+mapImageSection.set(0x20000000, "MEM_EXECUTE"); // The section can be executed as code.
+mapImageSection.set(0x40000000, "MEM_READ"); // The section can be read.
+mapImageSection.set(0x80000000, "MEM_WRITE"); // The section can be written to.
+
+function readExportTable() {
+  
+}
+// The export table address and size. For more information see .edata Section (Image Only).
+
+function readImportTable() {
+  
+}
+// The import table address and size. For more information, see The .idata Section.
+
+function readResourceTable() {
+  
+}
+// The resource table address and size. For more information, see The .rsrc Section.
+
+function readExceptionTable() {
+  
+}
+// The exception table address and size. For more information, see The .pdata Section.
+
+function readCertificateTable() {
+  
+}
+// The attribute certificate table address and size. For more information, see The Attribute Certificate Table (Image Only).
+
+function readBaseRelocationTable() {
+  
+}
+// The base relocation table address and size. For more information, see The .reloc Section (Image Only).
+
+function readDebug() {
+  
+}
+// The debug data starting address and size. For more information, see The .debug Section.
+
+function readArchitecture() {
+  
+}
+// Reserved, must be 0
+
+function readGlobalPtr() {
+  
+}
+// The RVA of the value to be stored in the global pointer register. The size member of this structure must be set to zero.
+
+function readTLSTable() {
+  
+}
+// The thread local storage (TLS) table address and size. For more information, see The .tls Section.
+
+function readLoadConfigTable() {
+  
+}
+// The load configuration table address and size. For more information, see The Load Configuration Structure (Image Only).
+
+function readBoundImport() {
+  
+}
+// The bound import table address and size.
+
+function readIAT() {
+  
+}
+// The import address table address and size. For more information, see Import Address Table.
+
+function readDelayImportDescriptor() {
+  
+}
+// The delay import descriptor address and size. For more information, see Delay-Load Import Tables (Image Only).
+
+function readCLRRuntimeHeader() {
+  
+}
+// The CLR runtime header address and size. For more information, see The .cormeta Section (Object Only).
+
+// Reserved, must be zero
+
 /*
 const mod = byte >> 6;
 const reg = (byte >> 3) & 0x07;
@@ -133,6 +271,7 @@ function seg(x) {
 // This function reads 0x40 bytes and returns the DOS header object
 function readDOSHeader(input) {
   const ret = {};
+  const fileCounter = input.getCounter();
   const magic_number = await input.readUint16LE();
   if (magic_number !== 0x5A4D) {
     throw new Error("magic_number must be 'MZ'");
@@ -196,6 +335,9 @@ function readCOFFFileHeader(input) {
     ret.majorSubsystemVersion = await input.readUint16LE();
     ret.minorSubsystemVersion = await input.readUint16LE();
     ret.Win32VersionValue = await input.readUint32LE();
+    if (ret.Win32VersionValue !== 0) {
+      throw new Error("Win32 Version Value must be 0.");
+    }
     ret.sizeOfImage = await input.readUint32LE();
     ret.sizeOfHeaders = await input.readUint32LE();
     ret.checksum = await input.readUint32LE();
@@ -225,6 +367,9 @@ function readCOFFFileHeader(input) {
     ret.majorSubsystemVersion = await input.readUint16LE();
     ret.minorSubsystemVersion = await input.readUint16LE();
     ret.Win32VersionValue = await input.readUint32LE();
+    if (ret.Win32VersionValue !== 0) {
+      throw new Error("Win32 Version Value must be 0.");
+    }
     ret.sizeOfImage = await input.readUint32LE();
     ret.sizeOfHeaders = await input.readUint32LE();
     ret.checksum = await input.readUint32LE();
@@ -239,15 +384,245 @@ function readCOFFFileHeader(input) {
   } else {
     throw new Error("Bad Optional Header Magic Number");
   }
-  
+  if (ret.numberOfRvaAndSizes > 0x10) {
+    throw new Error("Bad Optional Header Magic Number");
+  }
+  ret.dataDirectories = [];
+  for (let i = 0; i < ret.numberOfRvaAndSizes; ++i) {
+    const dataDirectory = {};
+    dataDirectory.virtualAddress = await input.readUint32LE();
+    dataDirectory.size = await input.readUint32LE();
+    ret.dataDirectories.push(dataDirectory);
+  }
+  for (let i = ret.dataDirectories; i < 0x10; ++i) {
+    ret.dataDirectories.push({
+      virtualAddress: 0,
+      size: 0,
+    });
+  }
   ret.sections = [];
   for (let i = 0; i < ret.numSections; ++i) {
     const section = {};
-    section.virtualAddress = await input.readUint32LE();
-    section.size = await input.readUint32LE();
+    section.name = await input.readBytes(8);
+    section.virtualSize = await input.readUint32LE(); // size in memory
+    section.virtualAddress = await input.readUint32LE(); // mem address relative to image base
+    section.sizeOfRawData = await input.readUint32LE(); // size in file
+    section.pointerToRawData = await input.readUint32LE(); // offset in file
+    section.pointerToRelocations = await input.readUint32LE(); // offset in file
+    section.pointerToLineNumbers = await input.readUint32LE(); // offset in file
+    section.numRelocations = await input.readUint16LE();
+    section.numLineNumbers = await input.readUint16LE();
+    section.characteristics = await input.readUint32LE();
     ret.sections.push(section);
   }
+  const sortedFileSections = Array.from(ret.sections);
+  sortedFileSections.sort((a, b) => { return (a.pointerToRawData < b.pointerToRawData); });
+  for (const section of sortedFileSections) {
+    if (fileCounter.index > section.pointerToRawData) {
+      throw new Error("Sections must not overlap");
+    }
+    await input.skipBytes(section.pointerToRawData - fileCounter.index);
+    section.data = await input.readBytes(section.sizeOfRawData);
+  }
+  const sortedMemorySections = Array.from(ret.sections);
+  sortedMemorySections.sort((a, b) => { return (a.virtualAddress < b.virtualAddress); })
+  function getMemory(rva, size) {
+    const section = sortedMemorySections[0];
+    while (section.virtualAddress <= rva) {
+      if (rva + size <= section.virtualAddress + section.virtualSize) {
+        return new DataView(section.data.buffer, rva - section.virtualAddress, size);
+      }
+    }
+    throw new Error("No section contains this RVA/size.");
+  }
 }
+
+function HeapSink() {
+  Object.defineProperty(this, "_dataview", {
+    get: () => { return dataview; },
+    set: undefined,
+    configurable: false,
+    enumerable: false,
+  });
+}
+HeapSink.prototype = {
+  sink() {
+    return {
+      getCounter() {
+        const base = index;
+        return {
+          get index() {
+            return (index - base);
+          }
+        };
+      },
+      writeBytes(heapSource) {
+        const sourceDataview = heapSource._dataview;
+        const sourceArray = new Uint8Array(sourceDataview.buffer, sourceDataview.byteOffset, sourceDataview.byteLength);
+        const sinkDataview = this._dataview;
+        const sinkArray = new Uint8Array(sinkDataview.buffer, sinkDataview.byteOffset, sinkDataview.byteLength);
+        sinkArray.set(sourceArray, index);
+      },
+      writeUint8() {
+        return dataview.setUint8(index);
+      },
+      writeSint8() {
+        return dataview.setInt8(index);
+      },
+      writeUint16LE() {
+        return dataview.setUint16(index, true);
+      },
+      writeUint16BE() {
+        return dataview.setUint16(index, false);
+      },
+      writeSint16LE() {
+        return dataview.setInt16(index, true);
+      },
+      writeSint16BE() {
+        return dataview.setInt16(index, false);
+      },
+      writeUint32LE() {
+        return dataview.setUint32(index, true);
+      },
+      writeUint32BE() {
+        return dataview.setUint32(index, false);
+      },
+      writeSint32LE() {
+        return dataview.setInt32(index, true);
+      },
+      writeSint32BE() {
+        return dataview.setInt32(index, false);
+      },
+      writeUint64LE() {
+        return dataview.setBigUint64(index, true);
+      },
+      writeUint64BE() {
+        return dataview.setBigUint64(index, false);
+      },
+      writeSint64LE() {
+        return dataview.setBigInt64(index, true);
+      },
+      writeSint64BE() {
+        return dataview.setBigInt64(index, false);
+      },
+      writeFloat32LE() {
+        return dataview.setFloat32(index, true);
+      },
+      writeFloat32BE() {
+        return dataview.setFloat32(index, false);
+      },
+      writeFloat64LE() {
+        return dataview.setFloat64(index, true);
+      },
+      writeFloat64BE() {
+        return dataview.setFloat64(index, false);
+      },
+    };
+  },
+};
+function HeapSource(dataview) {
+  Object.defineProperty(this, "_dataview", {
+    get: () => { return dataview; },
+    set: undefined,
+    configurable: false,
+    enumerable: false,
+  });
+}
+HeapSource.prototype = {
+  stream() {
+    let index = 0;
+    return {
+      getCounter() {
+        const base = index;
+        return {
+          get index() {
+            return (index - base);
+          }
+        };
+      },
+      readBytes(numBytes) {
+        const dataview = this._dataview;
+        return new MemoryBlock(new DataView(dataview.buffer, dataview.byteOffset + index, numBytes));
+      },
+      readUint8() {
+        const ret = dataview.getUint8(index);
+        index += 1;
+        return ret;
+      },
+      readSint8() {
+        const ret = dataview.getInt8(index);
+        index += 1;
+      },
+      readUint16LE() {
+        const ret = dataview.getUint16(index, true);
+        index += 2;
+      },
+      readUint16BE() {
+        const ret = dataview.getUint16(index, false);
+        index += 2;
+      },
+      readSint16LE() {
+        const ret = dataview.getInt16(index, true);
+        index += 2;
+      },
+      readSint16BE() {
+        const ret = dataview.getInt16(index, false);
+        index += 2;
+      },
+      readUint32LE() {
+        const ret = dataview.getUint32(index, true);
+        index += 4;
+      },
+      readUint32BE() {
+        const ret = dataview.getUint32(index, false);
+        index += 4;
+      },
+      readSint32LE() {
+        const ret = dataview.getInt32(index, true);
+        index += 4;
+      },
+      readSint32BE() {
+        return dataview.getInt32(index, false);
+        index += 4;
+      },
+      readUint64LE() {
+        return dataview.getBigUint64(index, true);
+        index += 8;
+      },
+      readUint64BE() {
+        return dataview.getBigUint64(index, false);
+        index += 8;
+      },
+      readSint64LE() {
+        return dataview.getBigInt64(index, true);
+        index += 8;
+      },
+      readSint64BE() {
+        return dataview.getBigInt64(index, false);
+        index += 8;
+      },
+      readFloat32LE() {
+        return dataview.getFloat32(index, true);
+        index += 4;
+      },
+      readFloat32BE() {
+        return dataview.getFloat32(index, false);
+        index += 4;
+      },
+      readFloat64LE() {
+        return dataview.getFloat64(index, true);
+        index += 8;
+      },
+      readFloat64BE() {
+        return dataview.getFloat64(index, false);
+        index += 8;
+      },
+    };
+  }
+  slice(offset, length) {
+    return new MemoryBlock(new DataView(dataview.buffer, index, numBytes));
+  }
+};
 
 class COFFFileHeader {
   #view;
